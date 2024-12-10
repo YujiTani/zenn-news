@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const sendEmail = (subject, text) => {
+const sendEmail = async (subject, text) => {
   const message = {
     from: process.env.EMAIL_FROM,
     to: process.env.EMAIL_TO,
