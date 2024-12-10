@@ -1,7 +1,6 @@
-// クロニウムを使って、Zennにアクセスする
 import { chromium } from "@playwright/test";
 
-import { scrapeArticlesWithHighLikes } from "./scrapeArticlesWithHighLikes.js";
+import { getArticles } from "./getArticles.js";
 
 (async () => {
   const browser = await chromium.launch({
@@ -29,7 +28,7 @@ import { scrapeArticlesWithHighLikes } from "./scrapeArticlesWithHighLikes.js";
   });
   await allTimeSortButton.click();
 
-  const articles = await scrapeArticlesWithHighLikes(page);
+  const articles = await getArticles(page);
   console.log(articles);
 
   // await browser.close();
