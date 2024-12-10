@@ -1,13 +1,20 @@
 import { chromium } from "@playwright/test";
 
 import { getArticles } from "./getArticles.js";
-import { updateGoogleSpreadSheet } from "./updateGoogleSpreadSheet.js";
+import { updateArticleSheet } from "./updateArticleSheet.js";
+import { updateArticleTagsSheet } from "./updateArticleTagsSheet.js";
 
 (async () => {
-  const browser = await chromium.launch({
+  const browser = await chromium.launch(
+    // デバック時にコメントを外す
+    {
     headless: false,
     slowMo: 300,
-  });
+    }
+  );
+
+  // 変更可能な値
+  const maxPages = 1;
   
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -33,9 +40,12 @@ import { updateGoogleSpreadSheet } from "./updateGoogleSpreadSheet.js";
   await allTimeSortButton.click();
   await page.waitForLoadState('networkidle');
 
-  const maxPages = 10;
   const articles = await getArticles(page, maxPages);
-  await updateGoogleSpreadSheet(articles);
+  await updateArticleSheet(articles);
+  // 制限に引っかからないように1分待機する
+  console.log('制限にかからないように1分待機後、次の処理を実行します');
+  await new Promise(resolve => setTimeout(resolve, 60000));
+  await updateArticleTagsSheet(articles);
 
   await browser.close();
 })();

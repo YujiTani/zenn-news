@@ -6,7 +6,7 @@ env.config();
 
 const require = createRequire(import.meta.url);
 
-const updateGoogleSpreadSheet = async (data) => {
+const updateArticleTagsSheet = async (data) => {
   const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID);
 
   await doc.useServiceAccountAuth({
@@ -19,16 +19,24 @@ const updateGoogleSpreadSheet = async (data) => {
   // 初回実行時はシートを作成する必要があるため、コメントを外す
   // シートが存在する場合この工程はスキップする
 
-  let sheet = doc.sheetsByTitle['zenn_articles'];
+  let sheet = doc.sheetsByTitle['article_tags'];
 
   if (!sheet) {
     sheet = await doc.addSheet({
-      title: 'zenn_articles',
-      headerValues: ['title', 'likes', 'url']
+      title: 'article_tags',
+      headerValues: ['article_title', 'tag']
     });
   }
 
-  const rows = await sheet.addRows(data);
+  // 保存用のデータを作成
+  const tagRows = data.flatMap(article =>
+    article.tags.map(tag => ({
+      article_title: article.title,
+      tag: tag
+    }))
+  );
+
+  const rows = await sheet.addRows(tagRows);
   
   // 200件ずつ保存する、完了しない場合は1分待機して再度実行する
   // ソース: https://developers.google.com/sheets/api/limits?hl=ja 
@@ -57,4 +65,4 @@ const updateGoogleSpreadSheet = async (data) => {
   }
 };
 
-export { updateGoogleSpreadSheet };
+export { updateArticleTagsSheet };
