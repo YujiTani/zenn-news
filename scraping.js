@@ -15,6 +15,8 @@ import { getArticles } from "./getArticles.js";
 
   const searchInput = page.locator("#header-search");
   await searchInput.click();
+  // 新しいネットワークリクエストが発生しない状態になるまで待つ
+  await page.waitForLoadState('networkidle');
 
   // 部分的なクラス名とhrefの組み合わせ
   // TODO: 配列で複数実行できるようにしたい
@@ -22,11 +24,13 @@ import { getArticles } from "./getArticles.js";
     'a[class*="TopicCardList_link"][href="/topics/nodejs"]'
   );
   await topicLink.click();
+  await page.waitForLoadState('networkidle');
 
   const allTimeSortButton = page.locator('a[class*="TabLinkGroup_link"]', {
     hasText: 'Alltime'
   });
   await allTimeSortButton.click();
+  await page.waitForLoadState('networkidle');
 
   const articles = await getArticles(page);
   console.log(articles);
