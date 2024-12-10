@@ -15,7 +15,6 @@ import { updateArticleTagsSheet } from "./updateArticleTagsSheet.js";
 
   // 変更可能な値
   const maxPages = 1;
-  
   const context = await browser.newContext();
   const page = await context.newPage();
   
