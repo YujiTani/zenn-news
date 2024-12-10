@@ -37,5 +37,5 @@ import { updateGoogleSpreadSheet } from "./updateGoogleSpreadSheet.js";
   const articles = await getArticles(page, maxPages);
   await updateGoogleSpreadSheet(articles);
 
-  // await browser.close();
+  await browser.close();
 })();
