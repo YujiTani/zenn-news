@@ -4,7 +4,7 @@ import { getArticles } from "./getArticles.js";
 import { updateArticleSheet } from "./updateArticleSheet.js";
 import { updateArticleTagsSheet } from "./updateArticleTagsSheet.js";
 
-(async () => {
+const main = async () => {
   const browser = await chromium.launch(
     // デバック時にコメントを外す
     {
@@ -47,4 +47,9 @@ import { updateArticleTagsSheet } from "./updateArticleTagsSheet.js";
   await updateArticleTagsSheet(articles);
 
   await browser.close();
-})();
+};
+
+// schedule.jsで実行する場合は、main()をコメントアウトする
+main();
+
+export { main };
