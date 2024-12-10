@@ -1,4 +1,4 @@
-const getArticles = async (page, maxPages = 5) => {
+const getArticles = async (page, maxPages = 10) => {
   const articles = [];
   
   for (let i = 1; i <= maxPages; i++) {

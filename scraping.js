@@ -1,6 +1,7 @@
 import { chromium } from "@playwright/test";
 
 import { getArticles } from "./getArticles.js";
+import { updateGoogleSpreadSheet } from "./updateGoogleSpreadSheet.js";
 
 (async () => {
   const browser = await chromium.launch({
@@ -32,8 +33,9 @@ import { getArticles } from "./getArticles.js";
   await allTimeSortButton.click();
   await page.waitForLoadState('networkidle');
 
-  const articles = await getArticles(page);
-  console.log(articles);
+  const maxPages = 10;
+  const articles = await getArticles(page, maxPages);
+  await updateGoogleSpreadSheet(articles);
 
   // await browser.close();
 })();
